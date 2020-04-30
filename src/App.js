@@ -5,7 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 
 //redux actions
-import { setCurrentUser } from './redux/user/user.actions'
+import { setCurrentUserAction } from './redux/user/user.actions'
 
 //components
 import Header from './components/header/header.component'
@@ -23,15 +23,7 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 
 ///Extend Component from React
 class App extends Component {
-  //call constructor with super() -- which allows us to use the this.state
-  // constructor() {
-  //   super();
-
-  //   // this.state = {
-  //   //   currentUser: null
-  //   // }
-  // }
-
+ 
   //the default should be unsubscribe from Auth == null
   unsubscribeFromAuth = null;
 
@@ -39,7 +31,7 @@ class App extends Component {
   componentDidMount() {
 
     //DECONSTRUCT setCurrentUser
-    const { setCurrentUser } = this.props;
+    const { setCurrentUserProp } = this.props;
 
     ///////////////////SIGN IN BY GOOGLE using .onAuthStateChanged()//////////////////////////////////
     //calling auth from firebase.util -- within has the method .onAuthStateChanged -- setting the state for the user that logged in via Google
@@ -60,19 +52,10 @@ class App extends Component {
           //the id is in the snapShot but not in .data()
           console.log(snapShot.data());
 
-          // //set the current user in the state
-          // this.setState({
-          //   currentUser: {
-          //     id: snapShot.id,
-          //     //... (ellipses) adds all the object properties we got
-          //     ...snapShot.data()
-          //   }
-          // }, () => console.log(this.state));
-
           /////////////////////////REDUX//////////////////////////
           //set the current user in the state
 
-          setCurrentUser({
+          setCurrentUserProp({
             id: snapShot.id,
             //... (ellipses) adds all the object properties we got
             ...snapShot.data()
@@ -85,13 +68,9 @@ class App extends Component {
         //   currentUser: userAuth
         // })
         // REDUX 
-        setCurrentUser(userAuth);
+        setCurrentUserProp(userAuth);
       }
 
-
-
-
-      // this.setState({ currentUser: user });
 
       // //import the constant from firebase util, and pass the user
       // createUserProfileDocument(user);
@@ -129,12 +108,15 @@ class App extends Component {
   }
 }
 
+//mapping state to props
 const mapStateToProps = ({ user }) => ({
   currentUser: user.currentUser
 });
 
+
+//dispatching props to action
 const mapDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+  setCurrentUserProp: user => dispatch(setCurrentUserAction(user))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

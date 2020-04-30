@@ -14,7 +14,6 @@ import { auth } from '../../firebase/firebase.utils';
 //components
 import CartIcon from '../cart-icon/cart-icon.component'
 import CartDropdown from '../cart-dropdown/cart-dropdown.component'
-import CartDropDown from '../cart-dropdown/cart-dropdown.component';
 
 const Header = ({ currentUser, hidden }) => (
     <div className="header">
@@ -43,13 +42,15 @@ const Header = ({ currentUser, hidden }) => (
         </div>
         {hidden ? null :
             <CartDropdown />
-        }
+        } 
     </div>
 );
 
+//mapping state as props to use in the app
 const mapStateToProps = ({ user: { currentUser }, cart: { hidden } }) => ({
     currentUser,
     hidden
-})
+}) 
+// you can now use the states as props =>  in const Header()
 
 export default connect(mapStateToProps)(Header);
