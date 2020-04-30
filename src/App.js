@@ -3,7 +3,9 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 //redux
 import { connect } from 'react-redux'
-import { setCurrentUser } from './redux/user/user.action'
+
+//redux actions
+import { setCurrentUser } from './redux/user/user.actions'
 
 //components
 import Header from './components/header/header.component'
