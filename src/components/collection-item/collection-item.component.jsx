@@ -1,4 +1,6 @@
 import React from 'react';
+
+//connect to store
 import { connect } from 'react-redux'
 
 //styles
