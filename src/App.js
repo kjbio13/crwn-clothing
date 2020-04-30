@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 //redux
 import { connect } from 'react-redux'
@@ -37,7 +37,7 @@ class App extends Component {
   componentDidMount() {
 
     //DECONSTRUCT setCurrentUser
-    const {setCurrentUser} = this.props;
+    const { setCurrentUser } = this.props;
 
     ///////////////////SIGN IN BY GOOGLE using .onAuthStateChanged()//////////////////////////////////
     //calling auth from firebase.util -- within has the method .onAuthStateChanged -- setting the state for the user that logged in via Google
@@ -109,7 +109,17 @@ class App extends Component {
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
-          <Route path="/signin" component={SignInAndSignUpPage} />
+          <Route exact path="/signin" render={
+            () => this.props.currentUser ?
+              (
+                <Redirect to="/" />
+              )
+              :
+              (
+
+                <SignInAndSignUpPage />
+              )
+          } />
         </Switch>
       </div>
 
@@ -117,8 +127,12 @@ class App extends Component {
   }
 }
 
+const mapStateToProps = ({ user }) => ({
+  currentUser: user.currentUser
+});
+
 const mapDispatchToProps = dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
