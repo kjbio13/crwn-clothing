@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 
+//redux
+import { connect } from 'react-redux'
+import { setCurrentUser } from './redux/user/user.action'
+
 //components
 import Header from './components/header/header.component'
 
@@ -18,19 +22,22 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 ///Extend Component from React
 class App extends Component {
   //call constructor with super() -- which allows us to use the this.state
-  constructor() {
-    super();
+  // constructor() {
+  //   super();
 
-    this.state = {
-      currentUser: null
-    }
-  }
+  //   // this.state = {
+  //   //   currentUser: null
+  //   // }
+  // }
 
   //the default should be unsubscribe from Auth == null
   unsubscribeFromAuth = null;
 
   //componentDidMount is a lifecylce of React -- anything that happens within this will run after the render as mounted - appeared 
   componentDidMount() {
+
+    //DECONSTRUCT setCurrentUser
+    const {setCurrentUser} = this.props;
 
     ///////////////////SIGN IN BY GOOGLE using .onAuthStateChanged()//////////////////////////////////
     //calling auth from firebase.util -- within has the method .onAuthStateChanged -- setting the state for the user that logged in via Google
@@ -51,21 +58,32 @@ class App extends Component {
           //the id is in the snapShot but not in .data()
           console.log(snapShot.data());
 
+          // //set the current user in the state
+          // this.setState({
+          //   currentUser: {
+          //     id: snapShot.id,
+          //     //... (ellipses) adds all the object properties we got
+          //     ...snapShot.data()
+          //   }
+          // }, () => console.log(this.state));
+
+          /////////////////////////REDUX//////////////////////////
           //set the current user in the state
-          this.setState({
-            currentUser: {
-              id: snapShot.id,
-              //... (ellipses) adds all the object properties we got
-              ...snapShot.data()
-            }
-          }, () => console.log(this.state));
+
+          setCurrentUser({
+            id: snapShot.id,
+            //... (ellipses) adds all the object properties we got
+            ...snapShot.data()
+          })
 
         })
       } else {
         //userAuth is null 
-        this.setState({
-          currentUser: userAuth
-        })
+        // this.setState({
+        //   currentUser: userAuth
+        // })
+        // REDUX 
+        setCurrentUser(userAuth);
       }
 
 
@@ -87,7 +105,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header currentUser={this.state.currentUser} />
+        <Header />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/shop" component={ShopPage} />
@@ -99,4 +117,8 @@ class App extends Component {
   }
 }
 
-export default App;
+const mapDispatchToProps = dispatch => ({
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect(null, mapDispatchToProps)(App);

@@ -35,7 +35,7 @@ class SignIn extends Component {
                 password: ""
             }
             console.log("Success!");
-            
+
         } catch (error) {
             console.log(error.message)
         }
@@ -84,7 +84,7 @@ class SignIn extends Component {
                             Sign In
                         </CustomButton>
 
-                        <CustomButton isGoogleSignIn onClick={signInWithGoogle}>
+                        <CustomButton type="button" isGoogleSignIn onClick={signInWithGoogle}>
                             {' '}
                             Sign In with Google
                             {' '}

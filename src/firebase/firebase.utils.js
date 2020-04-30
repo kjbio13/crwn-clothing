@@ -3,9 +3,12 @@ import 'firebase/firestore';
 import 'firebase/auth';
 require('dotenv').config();
 
+// const API_KEY = process.env.REACT_APP_API_KEY
+
 const config = {
     apiKey: "AIzaSyDuZLNlo5q-LW0Ls_jMx4lWiuJ0fHg9Ttc",
     authDomain: "crwn-db-c482a.firebaseapp.com",
+    // authDomain: API_KEY,
     databaseURL: "https://crwn-db-c482a.firebaseio.com",
     projectId: "crwn-db-c482a",
     storageBucket: "crwn-db-c482a.appspot.com",
