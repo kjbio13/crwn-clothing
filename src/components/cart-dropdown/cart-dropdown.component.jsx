@@ -7,6 +7,9 @@ import { connect } from 'react-redux'
 import CustomButton from '../custom-button/custom-button.component';
 import CartItem from '../../components/cart-item/cart-item.component'
 
+//selectors
+import { selectCartItems } from '../../redux/cart/cart.selectors'
+
 //styles
 import './cart-dropdown.styles.scss'
 
@@ -30,8 +33,9 @@ const CartDropdown = ({ cartItems }) => (
 );
 
 //connect to store -- redux - store.js and get the state and put to props in CartDropDown 
-const mapStateToProps = ({ cart: { cartItems } }) => ({
-    cartItems
+//use selector. cartItem object will now reference selector as value
+const mapStateToProps = (state) => ({
+    cartItems: selectCartItems(state)
 })
 
 export default connect(mapStateToProps)(CartDropdown);
