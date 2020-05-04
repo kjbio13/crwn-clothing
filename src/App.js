@@ -55,7 +55,7 @@ class App extends Component {
           //use .data() to get the properties we got from createUserProfile()
 
           //the id is in the snapShot but not in .data()
-          console.log(snapShot.data());
+          // console.log(snapShot.data());
 
           /////////////////////////REDUX//////////////////////////
           //set the current user in the state

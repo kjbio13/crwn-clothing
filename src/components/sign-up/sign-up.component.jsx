@@ -26,7 +26,7 @@ class signUp extends Component {
     handleSubmit = async event => {
         //aways prevent default
         event.preventDefault();
-        console.log("Submit")
+        // console.log("Submit")
         // destructure the state after the submit button is clicked
         const { displayName, email, password, confirmPassword } = this.state;
 
@@ -44,7 +44,7 @@ class signUp extends Component {
 
             //call the createUserProfileDocument we created in firebase util -- user from previous line
             await createUserProfileDocument(user, { displayName });
-            console.log("made");
+            // console.log("made");
 
             //reset the state
             this.setState({
@@ -56,7 +56,7 @@ class signUp extends Component {
 
         } catch (error) {
             console.log(error.message);
-            alert("Oopsie! " + error.message);
+            // alert("Oopsie! " + error.message);
 
         }
 
