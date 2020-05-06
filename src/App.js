@@ -66,7 +66,7 @@ class App extends Component {
             ...snapShot.data()
           })
 
-        })
+        }) 
       } else {
         //userAuth is null 
         // this.setState({

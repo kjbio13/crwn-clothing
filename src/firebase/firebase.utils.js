@@ -23,8 +23,10 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
     //check is not null
     if (!userAuth) return;
 
-    //reference a collection using firestore.doc(collection/documentID) - in this example the collection is users
+    //reference a collection using firestore.doc(collection/documentID) - in this example the collection is users -- .doc check if it exists, and perform CRUD -DOCUMENTS
     const userRef = firestore.doc(`users/${userAuth.uid}`)
+    //.collection reference the collection itself - queries the collection
+    // const collectionRef = firestore.collection('users');
 
     //READ the snapshot property of the userRef using .get() -- check if object returns exists: true
     const snapShot = await userRef.get();
@@ -59,6 +61,26 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 }
 
 firebase.initializeApp(config);
+
+export const convertCollectionSnapshotToMap = (collection) => {
+    const transformedCollection = collection.docs.map(doc => {
+        const { title, items } = doc.data();
+
+
+        return {
+            routeName: encodeURI(title.toLowerCase()),
+            id: doc.id,
+            title,
+            items
+        };
+    });
+
+    return transformedCollection.reduce((accumulator, collection) => {
+        accumulator[collection.title.toLowerCase()] = collection;
+        return accumulator;
+    }, {}); 
+
+};
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

@@ -14,6 +14,8 @@ import CollectionPreview from '../../components/collection-preview/collection-pr
 
 const CollectionsOverview = ({ collections }) => (
     <div className="collections-overview">
+        {console.log(collections + "logging")}
+
         {
             collections.map(({ id, ...otherCollectionProps }) => (
                 <CollectionPreview key={id} {...otherCollectionProps}></CollectionPreview>
