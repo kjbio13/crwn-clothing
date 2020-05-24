@@ -1,6 +1,37 @@
 import ShopActionTypes from './shop.types';
 
-export const updateCollections = (collectionsMap) => ({
-    type: ShopActionTypes.UPDATE_COLLECTIONS,
+import { firestore, convertCollectionSnapshotToMap } from '../../firebase/firebase.utils';
+
+// import { updateCollections } from '../../redux/shop/shop.actions';
+
+
+export const fetchCollectionsStart = () => ({
+    type: ShopActionTypes.FETCH_COLLECTIONS_START
+});
+
+export const fetchCollectionsSuccess = collectionsMap => ({
+    type: ShopActionTypes.FETCH_COLLECTIONS_SUCCESS,
     payload: collectionsMap
 })
+
+export const fetchCollectionsFailure = (errorMessage) => ({
+    type: ShopActionTypes.FETCH_COLLECTIONS_FAILURE,
+    payload: errorMessage
+})
+ 
+export const fetchCollectionsStartAsync = () => {
+    return dispatch => {
+        const collectionRef = firestore.collection('collection');
+        dispatch(fetchCollectionsStart());
+
+        collectionRef
+        .get()
+        .then(snapshot => {
+            const collectionsMap = convertCollectionSnapshotToMap(snapshot)
+            console.log(collectionsMap);
+            dispatch(fetchCollectionsSuccess(collectionsMap))
+            // this.setState({ loading: false })
+        }).catch(error => dispatch(fetchCollectionsFailure(error)))
+    }
+}
+
