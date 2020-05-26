@@ -5,7 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 //redux actions
-import { setCurrentUserAction } from './redux/user/user.actions';
+// import { setCurrentUserAction } from './redux/user/user.actions';
 
 //selectors
 import { createStructuredSelector } from 'reselect';
@@ -24,64 +24,18 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 import CheckoutPage from './pages/checkout/checkout.component';
 
 //utilities
-import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+// import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+
+import { checkUserSession } from './redux/user/user.actions'
 
 ///Extend Component from React
 class App extends Component {
 
-  //the default should be unsubscribe from Auth == null
   unsubscribeFromAuth = null;
 
-  //componentDidMount is a lifecylce of React -- anything that happens within this will run after the render as mounted - appeared 
   componentDidMount() {
-
-    //DECONSTRUCT setCurrentUser
-    const { setCurrentUserProp } = this.props;
-
-    ///////////////////SIGN IN BY GOOGLE using .onAuthStateChanged()//////////////////////////////////
-    //calling auth from firebase.util -- within has the method .onAuthStateChanged -- setting the state for the user that logged in via Google
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-
-      //if userAuth is not null -- if signing in -- using onAuthStateChanged when logging in via Google, userAuth object will trigger
-      if (userAuth) {
-
-        //we get the reference from the userAuth object being passed in via createUserProfileDocument - a method create in firebase.util
-        const userRef = await createUserProfileDocument(userAuth);
-
-        // check snapshop if user exists -- userRef is returned from createUserProfile()
-        //Use snapshots to get the data using onSnapShot() -- since we should be doing all back end stuff in the backend via firebase.util
-        //create a snapShot object
-        userRef.onSnapshot(snapShot => {
-          //use .data() to get the properties we got from createUserProfile()
-
-          //the id is in the snapShot but not in .data()
-          // console.log(snapShot.data());
-
-          /////////////////////////REDUX//////////////////////////
-          //set the current user in the state
-
-          setCurrentUserProp({
-            id: snapShot.id,
-            //... (ellipses) adds all the object properties we got
-            ...snapShot.data()
-          })
-
-        }) 
-      } else {
-        //userAuth is null 
-        // this.setState({
-        //   currentUser: userAuth
-        // })
-        // REDUX 
-        setCurrentUserProp(userAuth);
-      }
-
-
-      // //import the constant from firebase util, and pass the user
-      // createUserProfileDocument(user);
-      // console.log(user);
-
-    })
+    const { checkUserSession } = this.props;
+    checkUserSession();
   }
 
   componentWillUnmount() {
@@ -123,7 +77,8 @@ const mapStateToProps = createStructuredSelector({
 
 //dispatching props to action
 const mapDispatchToProps = dispatch => ({
-  setCurrentUserProp: user => dispatch(setCurrentUserAction(user))
+  // setCurrentUserProp: user => dispatch(setCurrentUserAction(user))
+  checkUserSession: () => dispatch(checkUserSession())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
